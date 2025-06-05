@@ -54,4 +54,4 @@ def transcribe_audio(file_path, config=None, model_name=None):
     if not segments:
         return '[Empty transcription]'
 
-    return identify_speakers(file_path, segments)
+    return identify_speakers(file_path, segments, config)
