@@ -1,0 +1,21 @@
+# Example settings
+
+# GPT summary settings
+gpt_summary:
+  enabled: true
+  model: gpt-4
+  api_key: ''  # or set via OPENAI_API_KEY in .env
+
+# Email SMTP settings
+email:
+  from: 'you@example.com'
+  password: ''  # or set via EMAIL_PASSWORD in .env
+  smtp: 'smtp.example.com'
+  port: 587
+  subject: 'Meeting Protocol'
+
+# Email groups
+email_groups:
+  - Management
+  - IT
+  - Sales

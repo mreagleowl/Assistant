@@ -1,0 +1,12 @@
+openai
+openai-whisper
+resemblyzer
+numpy
+librosa
+sounddevice
+soundfile
+pyaudio
+scikit-learn
+python-dotenv
+tk
+pyyaml

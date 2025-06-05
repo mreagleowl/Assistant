@@ -1,0 +1,4 @@
+[
+  {"name":"Alice","email":"alice@example.com","groups":["Management"]},
+  {"name":"Bob","email":"bob@example.com","groups":["IT"]}
+]
