@@ -1,7 +1,9 @@
 import os
 import yaml
+import logging
 from dotenv import load_dotenv
-from logger import logger
+
+logger = logging.getLogger(__name__)
 
 # Явно указываем путь к .env в папке config
 dotenv_path = os.path.join(os.path.dirname(__file__), '..', 'config', '.env')
