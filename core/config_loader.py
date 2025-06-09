@@ -1,7 +1,7 @@
 import os
 import yaml
-import logging
 from dotenv import load_dotenv
+import logging
 
 logger = logging.getLogger(__name__)
 
@@ -17,7 +17,7 @@ def load_config(path='config/settings.yaml'):
     try:
         with open(path, 'r', encoding='utf-8') as f:
             config = yaml.safe_load(f) or {}
-            logger.info(f"Config loaded from {path}")
+        logger.info(f"Config loaded from {path}")
     except FileNotFoundError:
         logger.error(f"Config file not found at: {path}")
     except yaml.YAMLError as e:

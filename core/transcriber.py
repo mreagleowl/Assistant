@@ -3,7 +3,9 @@
 import soundfile as sf
 import whisper
 from core.speaker_diarizer import identify_speakers
-from logger import logger   # обязательно, чтобы не было NameError
+import logging
+
+logger = logging.getLogger(__name__)
 
 # Кэш самой модели и её имени
 _model = None

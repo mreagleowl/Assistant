@@ -4,7 +4,9 @@ import os
 import librosa
 from resemblyzer import VoiceEncoder, preprocess_wav
 from sklearn.metrics.pairwise import cosine_similarity
-from logger import logger
+import logging
+
+logger = logging.getLogger(__name__)
 
 def format_timestamp(seconds: float) -> str:
     mins = int(seconds) // 60
