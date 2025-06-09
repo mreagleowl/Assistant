@@ -1,7 +1,9 @@
 # core/gpt_summary.py
 
 from openai import OpenAI
-from logger import logger
+import logging
+
+logger = logging.getLogger(__name__)
 
 # Клиент OpenAI инициализируется при первом вызове
 _client = None
@@ -21,7 +23,7 @@ def generate_summary(transcript_text: str, config: dict, prompt_text: str = None
     if not gs.get('enabled', False):
         return 'GPT summary disabled.'
 
-    api_key = gs.get('api_key')
+    api_key = gs.get('api_key_env')
     model   = gs.get('model', 'gpt-4')
     template = gs.get('prompt_template')
 

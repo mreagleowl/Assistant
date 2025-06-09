@@ -24,7 +24,7 @@ def load_config(path='config/settings.yaml'):
         logger.error(f"YAML parsing error: {e}")
 
     # Подхватываем API-ключ для GPT-выжимки
-    openai_key = os.getenv('OPENAI_API_KEY')
+    openai_key = os.getenv('api_key_env')
     if openai_key:
         config.setdefault('gpt_summary', {})['api_key'] = openai_key
         logger.info('OpenAI API key loaded from environment')

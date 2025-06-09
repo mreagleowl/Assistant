@@ -6,7 +6,9 @@ import threading
 import queue
 import datetime
 import os
-from logger import logger
+import logging
+
+logger = logging.getLogger(__name__)
 
 class AudioRecorder:
     def __init__(self, save_dir="recordings", samplerate=16000,

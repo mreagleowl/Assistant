@@ -1,6 +1,8 @@
 import smtplib
 from email.mime.text import MIMEText
-from logger import logger
+import logging
+
+logger = logging.getLogger(__name__)
 
 def send_report_email(recipients, text, config):
     ec = config.get('email', {})
