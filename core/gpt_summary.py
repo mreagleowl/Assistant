@@ -1,5 +1,6 @@
 # core/gpt_summary.py
 
+import os
 from openai import OpenAI
 import logging
 
@@ -8,13 +9,28 @@ logger = logging.getLogger(__name__)
 # Клиент OpenAI инициализируется при первом вызове
 _client = None
 
+def get_api_key_env(config_section: dict, default_env: str = "OPENAI_API_KEY") -> str:
+    """
+    Получает ключ для API:
+    - Сначала по config_section['api_key'] (если указан явно в YAML)
+    - Затем по config_section['api_key_env'] (как имя переменной .env)
+    - Затем из переменной default_env (например, OPENAI_API_KEY)
+    """
+    if config_section is None:
+        return os.getenv(default_env, "")
+    if "api_key" in config_section and config_section["api_key"]:
+        return config_section["api_key"]
+    if "api_key_env" in config_section and config_section["api_key_env"]:
+        return os.getenv(config_section["api_key_env"], "")
+    return os.getenv(default_env, "")
+
 def generate_summary(transcript_text: str, config: dict, prompt_text: str = None) -> str:
     """
     Генерирует выжимку из готовой стенограммы (transcript_text) с учётом:
       - выбранного в GUI текстового промпта (prompt_text);
       - если prompt_text не передан, берёт prompt_template из конфига;
       - если и там пусто, используется дефолтный промпт.
-      
+
     Возвращает строку с итоговым текстом выжимки.
     """
     global _client
@@ -23,12 +39,12 @@ def generate_summary(transcript_text: str, config: dict, prompt_text: str = None
     if not gs.get('enabled', False):
         return 'GPT summary disabled.'
 
-    api_key = gs.get('api_key_env')
-    model   = gs.get('model', 'gpt-4')
+    api_key = get_api_key_env(gs)
+    model = gs.get('model', 'gpt-4')
     template = gs.get('prompt_template')
 
     if not api_key:
-        logger.error('OpenAI API key missing')
+        logger.error('OpenAI API key missing (нет ни api_key ни api_key_env)')
         return '[Missing API key]'
 
     # Инициализируем или обновляем клиента
