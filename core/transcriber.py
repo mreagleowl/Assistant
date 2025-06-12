@@ -61,31 +61,33 @@ def transcribe_audio(file_path, config=None, model_name=None):
 
         return identify_speakers(file_path, segments, config)
 
-    # --- ONLINE Whisper API ---
+         # --- ONLINE Whisper API ---
     elif mode == 'online':
-        if openai is None:
+        try:
+            from openai import OpenAI
+        except ImportError:
             raise ImportError("Для online-режима нужен пакет openai: pip install openai")
 
-        api_key = ""
-        lang = None
-        if config:
-            api_key = config.get("transcription", {}).get("api_key", "")
-            lang = config.get("transcription", {}).get("language")
-        if not api_key:
-            raise ValueError("API-ключ для online-режима не задан в config['transcription']['api_key']")
+        from core.config_loader import get_api_key_env
+        section_cfg = config.get("transcription", {}) if config else {}
+        api_key = get_api_key_env(section_cfg)
+        lang = section_cfg.get("language")
 
-        openai.api_key = api_key
+        if not api_key:
+            raise ValueError("API-ключ для online-режима не задан (ни api_key, ни api_key_env, ни OPENAI_API_KEY)")
+
+        client = OpenAI(api_key=api_key)
 
         logger.info("[ONLINE] Загружаем аудиофайл для отправки в OpenAI Whisper API")
         with open(file_path, "rb") as audio_file:
-            transcript = openai.Audio.transcribe(
-                "whisper-1",
-                audio_file,
+            transcript = client.audio.transcriptions.create(
+                model="whisper-1",
+                file=audio_file,
                 language=lang,
                 response_format="verbose_json"
             )
 
-        segments = transcript.get("segments", [])
+        segments = getattr(transcript, "segments", [])
         if not segments:
             return '[Empty transcription]'
 

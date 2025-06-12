@@ -1,4 +1,4 @@
-version: 1.1
+version: 1
 formatters:
   standard:
     format: '%(asctime)s [%(levelname)s] %(name)s: %(message)s'

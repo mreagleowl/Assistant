@@ -37,9 +37,15 @@ def identify_speakers(audio_path, transcript_segments, config=None, reference_di
         show_timestamps = config.get('diarization', {}).get('show_timestamps', True)
 
     for segment in transcript_segments:
-        start = segment["start"]
-        end = segment["end"]
-        text = segment.get("text", "").strip()
+        if isinstance(segment, dict):
+            start = segment.get("start", 0.0)
+            end = segment.get("end", 0.0)
+            text = segment.get("text", "")
+        else:
+            start = getattr(segment, "start", 0.0)
+            end = getattr(segment, "end", 0.0)
+            text = getattr(segment, "text", "")
+            text = text.strip()
 
         wav, sr = librosa.load(audio_path, sr=16000, offset=start, duration=end - start)
         segment_embed = encoder.embed_utterance(wav)
